@@ -161,7 +161,7 @@ footer{text-align:center;padding:30px 5%;border-top:2px solid var(--red);color:v
     <div><b>Competition:</b> STEM Racing by Stemplify</div>
     <div><b>School:</b> Amity International School, Noida</div>
     <div><b>Email:</b> <a style="color:var(--text)" href="mailto:f1rangersindia@gmail.com">f1rangersindia@gmail.com</a></div>
-    <div><b>Phone:</b> <a style="color:var(--text)" href="tel:+919205708209">+91 92057 08209</a> (Hridyansh Bandil)</div>
+    <div><b>Phone:</b> <a style="color:var(--text)" href="tel:+919205708209">+91 87965 </a> (Madhur Aggrawal)</div>
     <div><b>Phone:</b> <a style="color:var(--text)" href="tel:+919321925692">+91 93219 25692</a> (Mihir Rai, Sponsorship Manager)</div>
   </div>
 </section></div>
@@ -206,12 +206,40 @@ const PROPOSAL="UEsDBBQABgAIAAAAIQAVptxahgEAAEwGAAATAAgCW0NvbnRlbnRfVHlwZXNdLnht
 document.getElementById("dlProposal").onclick=async()=>{
  const msg=document.getElementById("dlMsg");msg.textContent="";
  try{
-  const dl=await claude.use("downloads");
+  document.getElementById("dlProposal").onclick = () => {
+  try {
+    const bin = atob(PROPOSAL);
+    const bytes = new Uint8Array(bin.length);
+
+    for (let i = 0; i < bin.length; i++) {
+      bytes[i] = bin.charCodeAt(i);
+    }
+
+    const blob = new Blob([bytes], {
+      type: "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+    });
+
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+
+    link.href = url;
+    link.download = "F1_Rangers_Sponsorship_Proposal.docx";
+
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+
+    URL.revokeObjectURL(url);
+  } catch (error) {
+    document.getElementById("dlMsg").textContent =
+      "Couldn't download the proposal. Please try again.";
+  }
+};
   if(!dl){msg.textContent="Download isn't available here. Please email us for the proposal.";return}
   const bin=atob(PROPOSAL),u=new Uint8Array(bin.length);
   for(let i=0;i<bin.length;i++)u[i]=bin.charCodeAt(i);
   await dl.save({filename:"F1_Rangers_Sponsorship_Proposal.docx",data:new Blob([u])});
- }catch(e){if(!e||e.code!=="declined")msg.textContent="Couldn't download. Please email us for the proposal."}
+ }catch(e){if(!e||e.code!=="declined")msg.textContent="Couldn't download. Please email us for the proposal at f1rangersindia@gmail.com "}
 };
 </script>
 </body>
